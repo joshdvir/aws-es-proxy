@@ -1,0 +1,39 @@
+machine:
+  services:
+    - docker
+  environment:
+    REPO: joshdvir/delete-aws-es-incidents
+    VERSION: 0.4
+    IMPORT_PATH: "github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
+    PRIVATE_GOPATH: "$(echo $GOPATH | sed 's/:.*$//g')"
+    PACKAGE_NAME: "$(echo $CIRCLE_PROJECT_REPONAME | sed 's/go-//g')"
+
+dependencies:
+  override:
+    - mkdir -p ~/cache "$PRIVATE_GOPATH/src/$IMPORT_PATH"
+    - go version
+    - docker info
+    - go get -u -v github.com/Masterminds/glide
+    - glide install
+
+test:
+  override:
+    - echo "no tests"
+
+deployment:
+  master:
+    branch: master
+    commands:
+      - go version
+      - go get github.com/mitchellh/gox
+      - go get github.com/tcnksm/ghr
+      - gox -output "dist/aws-es-proxy-{{.OS}}-{{.Arch}}" -osarch="linux/amd64 darwin/amd64"
+      - ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --replace v$VERSION dist/
+
+  hub:
+    branch: master
+    commands:
+      - mkdir -p prod && cp Dockerfile prod/
+      - docker build -t $REPO -f Dockerfile --build-arg version=$VERSION prod/
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push $REPO
