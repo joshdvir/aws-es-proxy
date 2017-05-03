@@ -2,6 +2,6 @@ FROM scratch
 
 ADD aws-es-proxy-linux-amd64 /aws-es-proxy
 
-CMD ["-h"]
+CMD [ "-h" ]
 
-ENTRYPOINT ["/aws-es-proxy"]
+ENTRYPOINT [ "/aws-es-proxy", "-listen", ":8080" ]
