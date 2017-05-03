@@ -4,4 +4,4 @@ ADD aws-es-proxy-linux-amd64 /aws-es-proxy
 
 CMD [ "-h" ]
 
-ENTRYPOINT [ "/aws-es-proxy", "-listen", ":8080" ]
+ENTRYPOINT [ "/aws-es-proxy" ]
