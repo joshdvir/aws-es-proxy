@@ -15,9 +15,12 @@ dependencies:
     - docker info
     - go get -u -v github.com/Masterminds/glide
     - glide install
+    - go get -t -d -v ./...
+    - go build -v
 
 test:
   override:
+    - go test -v -race ./...
     - echo "no tests"
 
 deployment:
