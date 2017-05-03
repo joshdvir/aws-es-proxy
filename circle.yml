@@ -36,5 +36,6 @@ deployment:
       - cp Dockerfile prod/
       - docker build -t $REPO prod/
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag $REPO $REPO:$VERSION
       - docker push $REPO
       - docker push $REPO:$VERSION
