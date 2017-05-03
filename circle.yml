@@ -33,7 +33,7 @@ deployment:
       - ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --replace v$VERSION dist/
       - mkdir -p prod && cp Dockerfile prod/
       - cp dist/aws-es-proxy-linux-amd64 prod/
-      - cp dist/Dockerfile prod/
+      - cp Dockerfile prod/
       - docker build -t $REPO -f Dockerfile prod/
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push $REPO
