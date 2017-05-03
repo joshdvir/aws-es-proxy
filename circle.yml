@@ -34,6 +34,6 @@ deployment:
       - mkdir -p prod && cp Dockerfile prod/
       - cp dist/aws-es-proxy-linux-amd64 prod/
       - cp Dockerfile prod/
-      - docker build -t $REPO -f Dockerfile prod/
+      - docker build -t $REPO prod/
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push $REPO
