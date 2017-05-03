@@ -2,7 +2,7 @@ machine:
   services:
     - docker
   environment:
-    REPO: joshdvir/delete-aws-es-incidents
+    REPO: joshdvir/aws-es-proxy
     VERSION: 0.4
     IMPORT_PATH: "github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
     PRIVATE_GOPATH: "$(echo $GOPATH | sed 's/:.*$//g')"
@@ -36,6 +36,8 @@ deployment:
     branch: master
     commands:
       - mkdir -p prod && cp Dockerfile prod/
-      - docker build -t $REPO -f Dockerfile --build-arg version=$VERSION prod/
+      - cp dist/aws-es-proxy-linux-amd64 prod/
+      - cp dist/Dockerfile prod/
+      - docker build -t $REPO -f Dockerfile prod/
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push $REPO
